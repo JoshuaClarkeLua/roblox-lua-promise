@@ -1050,6 +1050,19 @@ function Promise.delay(seconds)
 end
 
 --[=[
+	Returns a cancelled Promise
+
+	@function cancel
+	@within Promise
+	@return Promise<nil>
+]=]
+function Promise.cancel()
+	local promise = Promise.new(function() end)
+	promise:cancel()
+	return promise
+end
+
+--[=[
 	Returns a new Promise that resolves if the chained Promise resolves within `seconds` seconds, or rejects if execution time exceeds `seconds`. The chained Promise will be cancelled if the timeout is reached.
 
 	Rejects with `rejectionValue` if it is non-nil. If a `rejectionValue` is not given, it will reject with a `Promise.Error(Promise.Error.Kind.TimedOut)`. This can be checked with [[Error.isKind]].
@@ -1979,4 +1992,7 @@ function Promise.onUnhandledRejection(callback)
 	end
 end
 
+export type Status = "Resolved" | "Rejected" | "Cancelled"
+export type Promise<T...> = typeof(Promise.new(...))
+export type PromiseAny = Promise<...any>
 return Promise
